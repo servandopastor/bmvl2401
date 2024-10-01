@@ -1,171 +1,222 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Consulta de Notas</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #ffffff;
-      color: #333333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .container {
-      max-width: 600px;
-      width: 100%;
-      text-align: center;
-    }
-    h1 {
-      font-size: 24px;
-      color: #333333;
-      margin-bottom: 20px;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border: 1px solid #e0e0e0;
-      border-radius: 3px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
-    input[type="text"]:focus {
-      outline: none;
-      box-shadow: 0 0 5px rgba(66, 133, 244, 0.5);
-    }
-    button {
-      background-color: #4285f4;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 18px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #3367d6;
-    }
-    #resultado {
-      margin-top: 20px;
-      text-align: left;
-      border: 1px solid #e0e0e0;
-      border-radius: 5px;
-      padding: 20px;
-      display: none;
-    }
-    .titulo {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .subtitulo {
-      font-size: 18px;
-      color: #555;
-      margin-bottom: 5px;
-    }
-    .archivo {
-      font-size: 16px;
-      color: #888;
-      margin-bottom: 15px;
-    }
-    .cuadro {
-      background-color: #f5f5f5;
-      border-radius: 5px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-    .nota-final {
-      font-size: 24px;
-      font-weight: bold;
-      color: #4285f4;
-    }
-    #error {
-      color: #d32f2f;
-      margin-top: 10px;
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Notas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #34495e;
+        }
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        input[type="text"], button, .slider {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .cuadro {
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .cuadro h3 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        .feedback p {
+            margin-bottom: 15px;
+        }
+        .nota-final {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        #error {
+            color: #c0392b;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .juego-container {
+            background-color: #e8f6f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 15px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        .slider:hover {
+            opacity: 1;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Consulta de Notas</h1>
-    <input type="text" id="rut" placeholder="Ingrese RUT sin puntos ni dígito verificador">
-    <button onclick="buscarNotas()">Buscar</button>
-    <div id="error"></div>
-    <div id="resultado"></div>
-  </div>
+    <div class="container">
+        <h1>Consulta de Notas</h1>
+        
+        <input type="text" id="rut" placeholder="Ingrese RUT sin puntos ni dígito verificador">
+        
+        <div class="juego-container">
+            <h3>¡Adivina tu Nota! (Opcional)</h3>
+            <p>Antes de ver tus resultados, ¿qué nota crees que obtuviste? Mueve el slider para seleccionar.</p>
+            <input type="range" min="10" max="70" value="40" class="slider" id="notaPredicha">
+            <p>Nota seleccionada: <span id="valorNota">4.0</span></p>
+        </div>
 
-  <script>
-    // URL actualizada del Google Apps Script
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbz40vvoCX579HLmopdTVm43CjNLEt7Qgh842drUVuryAi4lRLPemF-W_TbXnVqKuGMVQg/exec';
+        <button onclick="buscarNotas()">Conoce tu Evaluación</button>
+        
+        <div id="error"></div>
+        <div id="resultado"></div>
+    </div>
 
-    function buscarNotas() {
-      var rut = document.getElementById('rut').value;
-      var resultadoDiv = document.getElementById('resultado');
-      var errorDiv = document.getElementById('error');
-      
-      resultadoDiv.style.display = 'none';
-      errorDiv.style.display = 'none';
-      
-      fetch(`${GAS_URL}?rut=${encodeURIComponent(rut)}`)
-        .then(response => response.json())
-        .then(result => {
-          if (result.error) {
-            errorDiv.textContent = result.error;
-            errorDiv.style.display = 'block';
-          } else {
-            var html = `
-              <div class="titulo">${result.nombre}</div>
-              <div class="subtitulo">${result.tema}</div>
-              <div class="archivo">${result.archivo}</div>
-              <div class="cuadro">
-                <strong>LinkedIn:</strong> ${result.notaLinkedIn}<br>
-                <strong>Google Calendar:</strong> ${result.notaGoogleCalendar}
-              </div>
-              <div class="cuadro">
-                <strong>Relevancia:</strong> ${result.relevancia}<br>
-                <strong>Monografía:</strong> ${result.monografia}<br>
-                <strong>Aplicaciones:</strong> ${result.aplicaciones}<br>
-                <strong>Crítica:</strong> ${result.critica}<br>
-                <strong>Formato:</strong> ${result.formato}
-              </div>
-              <div class="cuadro">
-                <strong>Nota del Informe:</strong> ${result.notaInforme}
-              </div>
-              <div class="cuadro">
-                <strong>Feedback:</strong><br>
-                <strong>Relevancia:</strong> ${result.feedbackRelevancia}<br>
-                <strong>Monografía:</strong> ${result.feedbackMonografia}<br>
-                <strong>Aplicaciones:</strong> ${result.feedbackAplicaciones}<br>
-                <strong>Crítica:</strong> ${result.feedbackCritica}<br>
-                <strong>Formato:</strong> ${result.feedbackFormato}
-              </div>
-              <div class="cuadro">
-                <strong>Comentario General:</strong> ${result.comentarioGeneral}
-              </div>
-              <div class="cuadro">
-                <div class="nota-final">Calificación Final: ${result.calificacionFinal}</div>
-              </div>
-            `;
-            resultadoDiv.innerHTML = html;
-            resultadoDiv.style.display = 'block';
-          }
-        })
-        .catch(error => {
-          errorDiv.textContent = 'Error al buscar el RUT. Por favor, intente nuevamente.';
-          errorDiv.style.display = 'block';
-          console.error('Error:', error);
-        });
-    }
-  </script>
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbz40vvoCX579HLmopdTVm43CjNLEt7Qgh842drUVuryAi4lRLPemF-W_TbXnVqKuGMVQg/exec';
+        let notaAdivinada = 4.0;
+
+        document.getElementById('notaPredicha').oninput = function() {
+            notaAdivinada = this.value / 10;
+            document.getElementById('valorNota').textContent = notaAdivinada.toFixed(1);
+        }
+
+        function buscarNotas() {
+            const rut = document.getElementById('rut').value;
+            const resultadoDiv = document.getElementById('resultado');
+            const errorDiv = document.getElementById('error');
+            
+            resultadoDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            
+            fetch(`${GAS_URL}?rut=${encodeURIComponent(rut)}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.error) {
+                        errorDiv.textContent = result.error;
+                        errorDiv.style.display = 'block';
+                    } else {
+                        const calificacionReal = parseFloat(result.calificacionFinal);
+                        const diferencia = Math.abs(calificacionReal - notaAdivinada);
+                        let mensajeAdivinanza = '';
+                        if (diferencia === 0) {
+                            mensajeAdivinanza = '¡Increíble! Adivinaste tu nota exacta.';
+                        } else if (diferencia <= 0.5) {
+                            mensajeAdivinanza = '¡Muy cerca! Casi aciertas tu calificación.';
+                        } else {
+                            mensajeAdivinanza = 'Buen intento, pero tu calificación real es diferente.';
+                        }
+
+                        let html = `
+                            <h2>${result.nombre}</h2>
+                            <h3>${result.tema}</h3>
+                            <p>${result.archivo}</p>
+                            <p><strong>${mensajeAdivinanza}</strong></p>
+
+                            <div class="cuadro">
+                                <h3>Checklist Herramientas Digitales</h3>
+                                <p><strong>LinkedIn:</strong> ${result.notaLinkedIn}</p>
+                                <p><strong>Google Calendar:</strong> ${result.notaGoogleCalendar}</p>
+                            </div>
+
+                            <div class="cuadro feedback">
+                                <h3>Feedback Informe</h3>
+                                <p><strong>Criterio 1: Relevancia e Innovación del Tema</strong><br>${result.feedbackRelevancia}</p>
+                                <p><strong>Criterio 2: Monografía Analítica con Asistencia de IA</strong><br>${result.feedbackMonografia}</p>
+                                <p><strong>Criterio 3: Descripción del Uso de Aplicaciones</strong><br>${result.feedbackAplicaciones}</p>
+                                <p><strong>Criterio 4: Evaluación Crítica del Trabajo Realizado</strong><br>${result.feedbackCritica}</p>
+                                <p><strong>Criterio 5: Formato y Claridad del Informe</strong><br>${result.feedbackFormato}</p>
+                            </div>
+
+                            <div class="cuadro">
+                                <h3>Puntos Informe</h3>
+                                <p><strong>Relevancia:</strong> ${result.relevancia}</p>
+                                <p><strong>Monografía:</strong> ${result.monografia}</p>
+                                <p><strong>Aplicaciones:</strong> ${result.aplicaciones}</p>
+                                <p><strong>Crítica:</strong> ${result.critica}</p>
+                                <p><strong>Formato:</strong> ${result.formato}</p>
+                            </div>
+
+                            <div class="cuadro">
+                                <h3>Nota del Informe</h3>
+                                <p>${result.notaInforme}</p>
+                            </div>
+
+                            <div class="cuadro">
+                                <h3>Comentario General</h3>
+                                <p>${result.comentarioGeneral}</p>
+                            </div>
+
+                            <div class="cuadro">
+                                <h3>Calificación Final</h3>
+                                <p class="nota-final">${parseFloat(result.calificacionFinal).toFixed(1)}</p>
+                            </div>
+                        `;
+                        resultadoDiv.innerHTML = html;
+                        resultadoDiv.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    errorDiv.textContent = 'Error al buscar el RUT. Por favor, intente nuevamente.';
+                    errorDiv.style.display = 'block';
+                    console.error('Error:', error);
+                });
+        }
+    </script>
 </body>
 </html>
